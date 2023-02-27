@@ -120,4 +120,22 @@ export default class AuthController {
 
   }
 
+  public async me({ response, auth }: HttpContextContract) {
+
+    const user = await auth.use('api').authenticate()
+
+    // const data = await User.query()
+    //   .where('id',auth.user?.id)
+
+    const data = await User.query()
+      .where('id', user.id)
+      .preload('profile')
+      .preload('role')
+
+    return response.ok({
+      message: 'Informacion Cargada',
+      data: data
+    })
+
+  }
 }
